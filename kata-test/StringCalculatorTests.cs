@@ -82,7 +82,7 @@ namespace kata_test
         }
         
         [TestMethod]
-        public void StringCalculatorReturnError_WhenNumbersWithNewLineAndCommaSequential()
+        public void StringCalculatorThrowException_WhenNumbersWithNewLineAndCommaSequential()
         {
             var numbers = "1,\n";
             var calculator = new StringCalculator(new []{'\n', ','});
@@ -95,12 +95,21 @@ namespace kata_test
         public void StringCalculatorWorkCorrect__WhenDiffentDelimeters()
         {
             var numbers = "//;\n1;2";
-            var calculator = new StringCalculator(new []{';'});
+            var calculator = new StringCalculator(new []{';'}, new []{'/'});
             var expected = 3;
 
             var result = calculator.Add(numbers);
             
             Assert.AreEqual(expected, result);
+        }
+        
+        [TestMethod]
+        public void StringCalculatorThrowException_WhenPassedNegativeNumbers()
+        {
+            var numbers = "-1,2";
+            var calculator = new StringCalculator(new []{','});
+
+            Assert.ThrowsException<NegativeNotAllowed>(() => calculator.Add(numbers));
         }
     }
 }

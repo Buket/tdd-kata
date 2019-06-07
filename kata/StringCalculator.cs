@@ -5,6 +5,12 @@ using System.Text;
 
 namespace kata
 {
+    public class NegativeNotAllowed : Exception 
+    {
+        public NegativeNotAllowed(string msg = "Negative not allowed") : base(msg)
+        {
+        }
+    }
     public class StringCalculator
     {
         private readonly char[] _skippedSymbols;
@@ -72,7 +78,11 @@ namespace kata
         {
             if (_digits.Length > 0)
             {
-                sum += Int32.Parse(_digits.ToString());
+                var number = Int32.Parse(_digits.ToString());
+                if (number < 0)
+                    throw new NegativeNotAllowed();
+
+                sum += number;
             }
 
             return sum;
