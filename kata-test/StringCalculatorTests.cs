@@ -90,5 +90,17 @@ namespace kata_test
             Assert.ThrowsException<ArgumentException>(() => calculator.Add(numbers));
 
         }
+
+        [TestMethod]
+        public void StringCalculatorWorkCorrect__WhenDiffentDelimeters()
+        {
+            var numbers = "//;\n1;2";
+            var calculator = new StringCalculator(new []{';'});
+            var expected = 3;
+
+            var result = calculator.Add(numbers);
+            
+            Assert.AreEqual(expected, result);
+        }
     }
 }
