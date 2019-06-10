@@ -51,7 +51,7 @@ namespace kata
             {
                 if (IsSeparator(c))
                 {
-                    sum = AccamulateSum(sum);
+                    sum = AccamulatePositive(sum);
                     _digits.Clear();
                     
                     if (_separatorStack.Any())
@@ -69,18 +69,75 @@ namespace kata
             }
             
             
-            sum = AccamulateSum(sum);
+            sum = AccamulatePositive(sum);
 
             return sum;
         }
 
-        private int AccamulateSum(int sum)
+        public int AddNegative(string numbers)
+        {
+            if (string.IsNullOrEmpty(numbers))
+                return 0;
+
+            if (_skippedSymbols.Any(_ => numbers.Contains(_)))
+            {
+                numbers = _skippedSymbols.Aggregate(numbers, 
+                    (current, skippedSymbol) => 
+                        current.Replace(skippedSymbol.ToString(), string.Empty));
+            }
+
+            if (!_separators.All(delimetr => numbers.Contains(delimetr)))
+            {
+                return Int32.Parse(numbers);
+            }
+
+            int sum = 0;
+            foreach (var c in numbers.ToCharArray())
+            {
+                if (IsSeparator(c))
+                {
+                    sum = AccamulateNegative(sum);
+                    _digits.Clear();
+                    
+                    if (_separatorStack.Any())
+                        throw new ArgumentException();
+                    
+                    _separatorStack.Push(c);
+                    
+                    continue;
+                }
+                
+
+                _digits.Append(c);
+                if (_separatorStack.Any())
+                    _separatorStack.Pop();
+            }
+            
+            
+            sum = AccamulateNegative(sum);
+
+            return sum;
+        }
+        
+        private int AccamulatePositive(int sum)
         {
             if (_digits.Length > 0)
             {
                 var number = Int32.Parse(_digits.ToString());
                 if (number < 0)
                     throw new NegativeNotAllowed();
+
+                sum += number;
+            }
+
+            return sum;
+        }
+        
+        private int AccamulateNegative(int sum)
+        {
+            if (_digits.Length > 0)
+            {
+                var number = Int32.Parse(_digits.ToString());
 
                 sum += number;
             }

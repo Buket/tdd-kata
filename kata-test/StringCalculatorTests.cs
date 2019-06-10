@@ -111,5 +111,18 @@ namespace kata_test
 
             Assert.ThrowsException<NegativeNotAllowed>(() => calculator.Add(numbers));
         }
+        
+        [TestMethod]
+        public void StringCalculatorWorkCorrect_WhenPassedNegativeNumbers()
+        {
+            var numbers = "-1,2";
+            var calculator = new StringCalculator(new []{','});
+            var expected = 1;
+
+            var result = calculator.AddNegative(numbers);
+
+            
+            Assert.AreEqual(expected, result);
+        }
     }
 }
