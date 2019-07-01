@@ -10,6 +10,11 @@ namespace kata
         public NegativeNotAllowed(string msg = "Negative not allowed") : base(msg)
         {
         }
+        
+        public NegativeNotAllowed(IEnumerable<int> negativeNumbers, string msg = "Negative not allowed") : base(msg)
+        {
+//            this.Data.Add(negativeNumbers);
+        }
     }
     public class StringCalculator
     {
@@ -17,6 +22,7 @@ namespace kata
         private readonly char[] _separators;
         private StringBuilder _digits;
         private Stack<char> _separatorStack;
+        private List<int> _negartiveNumbers;
 
         public StringCalculator(char[] delimeters = null, char[] skippedSymbols = null)
         {
@@ -28,6 +34,7 @@ namespace kata
             _skippedSymbols = skippedSymbols ?? new[] {'/'};
             _digits = new StringBuilder();
             _separatorStack = new Stack<char>();
+            _negartiveNumbers = new List<int>();
         }
         public int Add(string numbers)
         {
@@ -116,6 +123,11 @@ namespace kata
             
             sum = AccamulateNegative(sum);
 
+            if (_negartiveNumbers.Any())
+            {
+                throw new NegativeNotAllowed($"Negative not allowed [{_negartiveNumbers}]");
+            }
+
             return sum;
         }
         
@@ -125,7 +137,9 @@ namespace kata
             {
                 var number = Int32.Parse(_digits.ToString());
                 if (number < 0)
-                    throw new NegativeNotAllowed();
+                {
+                    _negartiveNumbers.Add(number);
+                }
 
                 sum += number;
             }
