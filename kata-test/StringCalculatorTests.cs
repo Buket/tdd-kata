@@ -88,7 +88,6 @@ namespace kata_test
             var calculator = new StringCalculator(new []{'\n', ','});
 
             Assert.ThrowsException<ArgumentException>(() => calculator.Add(numbers));
-
         }
 
         [TestMethod]
@@ -113,16 +112,12 @@ namespace kata_test
         }
         
         [TestMethod]
-        public void StringCalculatorWorkCorrect_WhenPassedNegativeNumbers()
+        public void StringCalculatorThrowExceptionWithNegativeNumbcount_WhenPassedNegativeNumbers()
         {
-            var numbers = "-1,2";
+            var numbers = "-1,-2,-3";
             var calculator = new StringCalculator(new []{','});
-            var expected = 1;
-
-            var result = calculator.AddNegative(numbers);
-
-            
-            Assert.AreEqual(expected, result);
+            var e = Assert.ThrowsException<NegativeNotAllowed>(() => calculator.Add(numbers));
+            Assert.AreEqual(3, e.NegativeNumbers.Count);
         }
     }
 }

@@ -5,15 +5,19 @@ using System.Text;
 
 namespace kata
 {
-    public class NegativeNotAllowed : Exception 
+    public class NegativeNotAllowed : Exception
     {
+        private IList<int> negativeNumbers;
+
+        public IList<int> NegativeNumbers => negativeNumbers;
+
         public NegativeNotAllowed(string msg = "Negative not allowed") : base(msg)
         {
         }
         
         public NegativeNotAllowed(IEnumerable<int> negativeNumbers, string msg = "Negative not allowed") : base(msg)
         {
-//            this.Data.Add(negativeNumbers);
+            this.negativeNumbers = negativeNumbers.Select(_ => _).ToList();
         }
     }
     public class StringCalculator
@@ -78,59 +82,14 @@ namespace kata
             
             sum = AccamulatePositive(sum);
 
-            return sum;
-        }
-
-        public int AddNegative(string numbers)
-        {
-            if (string.IsNullOrEmpty(numbers))
-                return 0;
-
-            if (_skippedSymbols.Any(_ => numbers.Contains(_)))
-            {
-                numbers = _skippedSymbols.Aggregate(numbers, 
-                    (current, skippedSymbol) => 
-                        current.Replace(skippedSymbol.ToString(), string.Empty));
-            }
-
-            if (!_separators.All(delimetr => numbers.Contains(delimetr)))
-            {
-                return Int32.Parse(numbers);
-            }
-
-            int sum = 0;
-            foreach (var c in numbers.ToCharArray())
-            {
-                if (IsSeparator(c))
-                {
-                    sum = AccamulateNegative(sum);
-                    _digits.Clear();
-                    
-                    if (_separatorStack.Any())
-                        throw new ArgumentException();
-                    
-                    _separatorStack.Push(c);
-                    
-                    continue;
-                }
-                
-
-                _digits.Append(c);
-                if (_separatorStack.Any())
-                    _separatorStack.Pop();
-            }
-            
-            
-            sum = AccamulateNegative(sum);
-
             if (_negartiveNumbers.Any())
             {
-                throw new NegativeNotAllowed($"Negative not allowed [{_negartiveNumbers}]");
+                throw new NegativeNotAllowed(_negartiveNumbers);
             }
 
             return sum;
         }
-        
+
         private int AccamulatePositive(int sum)
         {
             if (_digits.Length > 0)
@@ -140,18 +99,6 @@ namespace kata
                 {
                     _negartiveNumbers.Add(number);
                 }
-
-                sum += number;
-            }
-
-            return sum;
-        }
-        
-        private int AccamulateNegative(int sum)
-        {
-            if (_digits.Length > 0)
-            {
-                var number = Int32.Parse(_digits.ToString());
 
                 sum += number;
             }
