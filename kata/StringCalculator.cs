@@ -27,6 +27,7 @@ namespace kata
         private StringBuilder _digits;
         private Stack<char> _separatorStack;
         private List<int> _negartiveNumbers;
+        private int _callCount;
 
         public StringCalculator(char[] delimeters = null, char[] skippedSymbols = null)
         {
@@ -42,6 +43,7 @@ namespace kata
         }
         public int Add(string numbers)
         {
+            _callCount++;
             if (string.IsNullOrEmpty(numbers))
                 return 0;
 
@@ -90,6 +92,11 @@ namespace kata
             return sum;
         }
 
+        public int GetCalledCount()
+        {
+            return _callCount;
+        }
+        
         private int AccamulatePositive(int sum)
         {
             if (_digits.Length > 0)

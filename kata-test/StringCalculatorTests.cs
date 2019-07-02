@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using kata;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -118,6 +119,23 @@ namespace kata_test
             var calculator = new StringCalculator(new []{','});
             var e = Assert.ThrowsException<NegativeNotAllowed>(() => calculator.Add(numbers));
             Assert.AreEqual(3, e.NegativeNumbers.Count);
+        }
+
+        [DataTestMethod]
+        [DataRow(6)]
+
+        public void GetCalledCountReturnZero__WhenCalled(int calcCallCount)
+        {
+            var numbers = "1,2";
+            var calculator = new StringCalculator(new []{','});
+            
+
+            //Enumerable.Repeat<Action>(() => calculator.Add(numbers), calcCallCount);
+            Enumerable.Range(0, calcCallCount).ToList().ForEach(_ => calculator.Add(numbers));
+            var result = calculator.GetCalledCount();
+            
+            Assert.IsTrue(result == calcCallCount);
+            
         }
     }
 }
