@@ -130,11 +130,13 @@ namespace kata_test
             var calculator = new StringCalculator(new []{','});
             
 
-            //Enumerable.Repeat<Action>(() => calculator.Add(numbers), calcCallCount);
+            var oldCallCount = calculator.GetCalledCount();
             Enumerable.Range(0, calcCallCount).ToList().ForEach(_ => calculator.Add(numbers));
-            var result = calculator.GetCalledCount();
+            var calledCount = calculator.GetCalledCount();
+
+            var nowCalledCount = calledCount - oldCallCount;
+            Assert.AreEqual(calcCallCount, nowCalledCount);
             
-            Assert.IsTrue(result == calcCallCount);
             
         }
     }

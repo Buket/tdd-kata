@@ -27,7 +27,7 @@ namespace kata
         private StringBuilder _digits;
         private Stack<char> _separatorStack;
         private List<int> _negartiveNumbers;
-        private int _callCount;
+        private static int _callCount;
 
         public StringCalculator(char[] delimeters = null, char[] skippedSymbols = null)
         {
