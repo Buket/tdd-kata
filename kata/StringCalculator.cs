@@ -28,7 +28,14 @@ namespace kata
         private Stack<char> _separatorStack;
         private List<int> _negartiveNumbers;
         private static int _callCount;
+        
+        public int GetCalledCount()
+        {
+            return _callCount;
+        }
 
+        public event Action<string, int> AddOccured; 
+        
         public StringCalculator(char[] delimeters = null, char[] skippedSymbols = null)
         {
             if (delimeters == null || delimeters.Length == 0)
@@ -41,6 +48,7 @@ namespace kata
             _separatorStack = new Stack<char>();
             _negartiveNumbers = new List<int>();
         }
+        
         public int Add(string numbers)
         {
             _callCount++;
@@ -89,13 +97,10 @@ namespace kata
                 throw new NegativeNotAllowed(_negartiveNumbers);
             }
 
+            this.AddOccured?.Invoke(numbers, sum);
             return sum;
         }
 
-        public int GetCalledCount()
-        {
-            return _callCount;
-        }
         
         private int AccamulatePositive(int sum)
         {

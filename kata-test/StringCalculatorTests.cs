@@ -136,8 +136,25 @@ namespace kata_test
 
             var nowCalledCount = calledCount - oldCallCount;
             Assert.AreEqual(calcCallCount, nowCalledCount);
+        }
+
+        [TestMethod]
+        public void EventTriggerCalled__WhenTriggerIsSetted()
+        {
+            var numbers = "1,2";
+            var calculator = new StringCalculator(new []{','});
+            string input = string.Empty;
+            int value = int.MinValue;
+            calculator.AddOccured += delegate(string s, int i)
+            {
+                input = s;
+                value = i;
+            };
+
+            calculator.Add(numbers);
             
-            
+            Assert.AreNotEqual(string.Empty, input);
+            Assert.AreNotEqual(int.MinValue, value);
         }
     }
 }
