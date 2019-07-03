@@ -156,5 +156,16 @@ namespace kata_test
             Assert.AreNotEqual(string.Empty, input);
             Assert.AreNotEqual(int.MinValue, value);
         }
+
+        [TestMethod]
+        public void ShouldIgnoreNumber__WhenNumberGreater1000()
+        {
+            var numbers = "1001,2";
+            var calculator = new StringCalculator(new []{','});
+
+            var expected = 2;
+            var result = calculator.Add(numbers);
+            Assert.AreEqual(expected, result);
+        }
     }
 }

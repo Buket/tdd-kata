@@ -89,16 +89,20 @@ namespace kata
         
         private int AccamulatePositive(int sum)
         {
-            if (_digits.Length > 0)
-            {
-                var number = Int32.Parse(_digits.ToString());
-                if (number < 0)
-                {
-                    _negartiveNumbers.Add(number);
-                }
+            if (_digits.Length <= 0) return sum;
+            
+            var number = Int32.Parse(_digits.ToString());
 
-                sum += number;
+
+            if (number > 1000)
+                return sum;
+            
+            if (number < 0)
+            {
+                _negartiveNumbers.Add(number);
             }
+
+            sum += number;
 
             return sum;
         }
