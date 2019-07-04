@@ -17,7 +17,7 @@ namespace kata_test
 
             var result = calculator.Add(numbers);
             
-            Assert.IsTrue(result == expected);
+            Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
@@ -29,7 +29,7 @@ namespace kata_test
 
             var result = calculator.Add(numbers);
             
-            Assert.IsTrue(result == expected);
+            Assert.AreEqual(expected, result);
         }
         
         [DataTestMethod]
@@ -43,7 +43,7 @@ namespace kata_test
 
             var result = calculator.Add(numbers);
             
-            Assert.IsTrue(result == expected);
+            Assert.AreEqual(expected, result);
         }
         
         [TestMethod]
@@ -55,7 +55,7 @@ namespace kata_test
 
             var result = calculator.Add(numbers);
             
-            Assert.IsTrue(result == expected);
+            Assert.AreEqual(expected, result);
         }
         
         [TestMethod]
@@ -67,7 +67,7 @@ namespace kata_test
 
             var result = calculator.Add(numbers);
             
-            Assert.IsTrue(result == expected);
+            Assert.AreEqual(expected, result);
         }
         
         [TestMethod]
@@ -79,7 +79,7 @@ namespace kata_test
 
             var result = calculator.Add(numbers);
             
-            Assert.IsTrue(result == expected);
+            Assert.AreEqual(expected, result);
         }
         
         [TestMethod]

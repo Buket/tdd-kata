@@ -11,6 +11,11 @@ namespace kata
         private readonly char[] _separators;
         private StringBuilder _digits;
         private Stack<char> _separatorStack;
+        
+        private StringBuilder _separatorsBuffer;
+        private readonly List<string> _separators_;
+        private Stack<string> _separatorStack_;
+        
         private List<int> _negartiveNumbers;
         private static int _callCount;
         
@@ -24,14 +29,22 @@ namespace kata
         public StringCalculator(char[] delimeters = null, char[] skippedSymbols = null)
         {
             if (delimeters == null || delimeters.Length == 0)
-                _separators = new [] { ',' };
+            {
+                _separators = new[] {','};
+                _separators_ = new List<string>{ "," };
+            }
             else
+            {
                 _separators = delimeters;
+                _separators_ = new List<string>(_separators.Select(_ => _.ToString()));
+            }
 
             _skippedSymbols = skippedSymbols ?? new[] {'/'};
             _digits = new StringBuilder();
             _separatorStack = new Stack<char>();
+            _separatorStack_= new Stack<string>();
             _negartiveNumbers = new List<int>();
+            _separatorsBuffer = new StringBuilder();
         }
         
         public int Add(string numbers)
@@ -60,18 +73,29 @@ namespace kata
                     sum = AccamulatePositive(sum);
                     _digits.Clear();
                     
-                    if (_separatorStack.Any())
+                    if (_separatorStack_.Any())
                         throw new ArgumentException();
                     
-                    _separatorStack.Push(c);
-                    
+                    _separatorsBuffer.Append(c);
                     continue;
                 }
                 
+                //it digit
+                /*save from _separatorBuffer to _separators_, flush buffer*/
+                if (_separatorsBuffer.Length >0 && !IsValidSeparator(_separatorsBuffer))
+                {
+                    throw new ArgumentException();
+                }
 
+                if (_separatorsBuffer.Length > 0)
+                {
+                    _separatorStack_.Push(_separatorsBuffer.ToString());
+                    _separatorsBuffer.Clear();   
+                }
+                
                 _digits.Append(c);
-                if (_separatorStack.Any())
-                    _separatorStack.Pop();
+                if (_separatorStack_.Any())
+                    _separatorStack_.Pop();
             }
             
             
@@ -86,7 +110,13 @@ namespace kata
             return sum;
         }
 
-        
+        private bool IsValidSeparator(StringBuilder separatorsBuffer)
+        {
+            var s = separatorsBuffer.ToString();
+            return _separators_.Any(_ => _.Equals(s));
+        }
+
+
         private int AccamulatePositive(int sum)
         {
             if (_digits.Length <= 0) return sum;
