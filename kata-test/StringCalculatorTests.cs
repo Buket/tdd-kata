@@ -50,7 +50,7 @@ namespace kata_test
         public void StringCalculatorReturn3_WhenNumbersWithNewLine()
         {
             var numbers = "1\n2";
-            var calculator = new StringCalculator(new []{'\n'});
+            var calculator = new StringCalculator(new []{"\n"});
             var expected = 3;
 
             var result = calculator.Add(numbers);
@@ -62,7 +62,7 @@ namespace kata_test
         public void StringCalculatorReturn3_WhenNumbersWithComma()
         {
             var numbers = "1,2";
-            var calculator = new StringCalculator(new []{','});
+            var calculator = new StringCalculator(new []{","});
             var expected = 3;
 
             var result = calculator.Add(numbers);
@@ -74,28 +74,19 @@ namespace kata_test
         public void StringCalculatorReturn3_WhenNumbersWithNewLineAndComma()
         {
             var numbers = "1\n2,3";
-            var calculator = new StringCalculator(new []{'\n', ','});
+            var calculator = new StringCalculator(new []{"\n", ","});
             var expected = 6;
 
             var result = calculator.Add(numbers);
             
             Assert.AreEqual(expected, result);
         }
-        
-        [TestMethod]
-        public void StringCalculatorThrowException_WhenNumbersWithNewLineAndCommaSequential()
-        {
-            var numbers = "1,\n";
-            var calculator = new StringCalculator(new []{'\n', ','});
-
-            Assert.ThrowsException<ArgumentException>(() => calculator.Add(numbers));
-        }
 
         [TestMethod]
         public void StringCalculatorWorkCorrect__WhenDiffentDelimeters()
         {
             var numbers = "//;\n1;2";
-            var calculator = new StringCalculator(new []{';'}, new []{'/'});
+            var calculator = new StringCalculator(new []{";"}, new []{"/"});
             var expected = 3;
 
             var result = calculator.Add(numbers);
@@ -107,7 +98,7 @@ namespace kata_test
         public void StringCalculatorThrowException_WhenPassedNegativeNumbers()
         {
             var numbers = "-1,2";
-            var calculator = new StringCalculator(new []{','});
+            var calculator = new StringCalculator(new []{","});
 
             Assert.ThrowsException<NegativeNotAllowed>(() => calculator.Add(numbers));
         }
@@ -116,7 +107,7 @@ namespace kata_test
         public void StringCalculatorThrowExceptionWithNegativeNumbcount_WhenPassedNegativeNumbers()
         {
             var numbers = "-1,-2,-3";
-            var calculator = new StringCalculator(new []{','});
+            var calculator = new StringCalculator(new []{","});
             var e = Assert.ThrowsException<NegativeNotAllowed>(() => calculator.Add(numbers));
             Assert.AreEqual(3, e.NegativeNumbers.Count);
         }
@@ -127,7 +118,7 @@ namespace kata_test
         public void GetCalledCountReturnZero__WhenCalled(int calcCallCount)
         {
             var numbers = "1,2";
-            var calculator = new StringCalculator(new []{','});
+            var calculator = new StringCalculator(new []{","});
             
 
             var oldCallCount = calculator.GetCalledCount();
@@ -142,7 +133,7 @@ namespace kata_test
         public void EventTriggerCalled__WhenTriggerIsSetted()
         {
             var numbers = "1,2";
-            var calculator = new StringCalculator(new []{','});
+            var calculator = new StringCalculator(new []{","});
             string input = string.Empty;
             int value = int.MinValue;
             calculator.AddOccured += delegate(string s, int i)
@@ -161,10 +152,22 @@ namespace kata_test
         public void ShouldIgnoreNumber__WhenNumberGreater1000()
         {
             var numbers = "1001,2";
-            var calculator = new StringCalculator(new []{','});
+            var calculator = new StringCalculator(new []{","});
 
             var expected = 2;
             var result = calculator.Add(numbers);
+            Assert.AreEqual(expected, result);
+        }
+        
+        [TestMethod]
+        public void StringCalculatorWorkCorrect__WhenDelimeterHasLengthGreater1()
+        {
+            var numbers = "//***\n1***2***3";
+            var calculator = new StringCalculator(new []{"***"}, new []{"/"});
+            var expected = 6;
+
+            var result = calculator.Add(numbers);
+            
             Assert.AreEqual(expected, result);
         }
     }
