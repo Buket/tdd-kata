@@ -172,10 +172,22 @@ namespace kata_test
         }
         
         [TestMethod]
-        public void StringCalculatorAllowWorkCorrect__WhenUseMultipleDelimetr()
+        public void StringCalculatorWorkCorrect__WhenUseMultipleDelimetr()
         {
             var numbers = "//*%\n1%2*3";
             var calculator = new StringCalculator(new []{"*", "%"}, new []{"/", "\n"});
+            var expected = 6;
+
+            var result = calculator.Add(numbers);
+            
+            Assert.AreEqual(expected, result);
+        }
+        
+        [TestMethod]
+        public void StringCalculatorWorkCorrect__WhenUseLongMultipleDelimetr()
+        {
+            var numbers = "//**%%\n1%%2**3";
+            var calculator = new StringCalculator(new []{"**", "%%"}, new []{"/", "\n"});
             var expected = 6;
 
             var result = calculator.Add(numbers);
