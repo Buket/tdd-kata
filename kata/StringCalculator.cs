@@ -7,12 +7,12 @@ namespace kata
 {
     public class StringCalculator
     {
-        private readonly string[] _skippedSymbols;
+        private readonly string[] _skippedSeparators;
         private StringBuilder _digits;
         
         private StringBuilder _separatorsBuffer;
         private readonly List<string> _separators;
-        private Stack<string> _separatorStack_;
+        private Stack<string> _separatorStack;
         
         private List<int> _negartiveNumbers;
         private static int _callCount;
@@ -35,9 +35,9 @@ namespace kata
                 _separators = new List<string>(delimeters.Select(_ => _.ToString()));
             }
 
-            _skippedSymbols = skippedSymbols ?? new[] {"/"};
+            _skippedSeparators = skippedSymbols ?? new[] {"/"};
             _digits = new StringBuilder();
-            _separatorStack_= new Stack<string>();
+            _separatorStack= new Stack<string>();
             _negartiveNumbers = new List<int>();
             _separatorsBuffer = new StringBuilder();
         }
@@ -48,9 +48,9 @@ namespace kata
             if (string.IsNullOrEmpty(numbers))
                 return 0;
 
-            if (_skippedSymbols.Any(_ => numbers.Contains(_)))
+            if (_skippedSeparators.Any(_ => numbers.Contains(_)))
             {
-                numbers = _skippedSymbols.Aggregate(numbers, 
+                numbers = _skippedSeparators.Aggregate(numbers, 
                     (current, skippedSymbol) => 
                         current.Replace(skippedSymbol.ToString(), string.Empty));
             }
@@ -63,34 +63,32 @@ namespace kata
             int sum = 0;
             foreach (var c in numbers.ToCharArray())
             {
-                if (/*IsSeparator(c.ToString())*/IsSeparatorPart(c.ToString()))
+                if (IsSeparatorPart(c.ToString()))
                 {
+
                     sum = AccamulatePositive(sum);
                     _digits.Clear();
-                    
-                    if (_separatorStack_.Any())
-                        throw new ArgumentException();
-                    
+
                     _separatorsBuffer.Append(c);
+                    
+                    if (IsSeparator(c.ToString()))
+                    {
+                        _separatorStack.Push(c.ToString());
+                        _separatorsBuffer.Clear();
+                    }
+                    
                     continue;
-                }
-                
-                //it digit
-                /*save from _separatorBuffer to _separators, flush buffer*/
-                if (_separatorsBuffer.Length >0 && !IsValidSeparator(_separatorsBuffer))
-                {
-                    throw new ArgumentException();
                 }
 
                 if (_separatorsBuffer.Length > 0)
                 {
-                    _separatorStack_.Push(_separatorsBuffer.ToString());
+                    _separatorStack.Push(_separatorsBuffer.ToString());
                     _separatorsBuffer.Clear();   
                 }
                 
                 _digits.Append(c);
-                if (_separatorStack_.Any())
-                    _separatorStack_.Pop();
+                if (_separatorStack.Any())
+                    _separatorStack.Pop();
             }
             
             
